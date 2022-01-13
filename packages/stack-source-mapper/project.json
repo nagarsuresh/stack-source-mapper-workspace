@@ -1,0 +1,34 @@
+{
+  "root": "packages/stack-source-mapper",
+  "sourceRoot": "packages/stack-source-mapper/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/stack-source-mapper/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/stack-source-mapper"],
+      "options": {
+        "jestConfig": "packages/stack-source-mapper/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/stack-source-mapper",
+        "tsConfig": "packages/stack-source-mapper/tsconfig.lib.json",
+        "packageJson": "packages/stack-source-mapper/package.json",
+        "main": "packages/stack-source-mapper/src/index.ts",
+        "assets": ["packages/stack-source-mapper/*.md"]
+      }
+    }
+  },
+  "tags": []
+}

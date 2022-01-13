@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "stack-source-mapper": "packages/stack-source-mapper",
+    "stack-source-mapper-test-app": "packages/stack-source-mapper-test-app"
+  }
+}

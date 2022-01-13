@@ -1,0 +1,52 @@
+{
+  "root": "packages/stack-source-mapper-test-app",
+  "sourceRoot": "packages/stack-source-mapper-test-app/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/stack-source-mapper-test-app",
+        "main": "packages/stack-source-mapper-test-app/src/main.ts",
+        "tsConfig": "packages/stack-source-mapper-test-app/tsconfig.app.json",
+        "assets": ["packages/stack-source-mapper-test-app/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "packages/stack-source-mapper-test-app/src/environments/environment.ts",
+              "with": "packages/stack-source-mapper-test-app/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:execute",
+      "options": {
+        "buildTarget": "stack-source-mapper-test-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/stack-source-mapper-test-app/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/stack-source-mapper-test-app"],
+      "options": {
+        "jestConfig": "packages/stack-source-mapper-test-app/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

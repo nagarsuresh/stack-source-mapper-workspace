@@ -21,13 +21,20 @@ This library does exactly that!!
 ## How to use
 
 ```
+import { mapStackTrace, parseStackTrace } from 'stack-source-mapper';
+
 const stackStr = `
   TypeError: {}.helloWorld is not a function
-  ------
+    at a.throwError (main.15600dbb30d4c3c4c884.js:1:196320)
+    at main.15600dbb30d4c3c4c884.js:1:213496
+    at nD (main.15600dbb30d4c3c4c884.js:1:59586)
+    at d (main.15600dbb30d4c3c4c884.js:1:59748)
+  ..........
+  ..........
 
 `;
 
-const sourceMapLocation = `${__dirname}/ ..... /app-source-maps/`;
+const sourceMapLocation = `.../location/...`;
 
   const result: string = await mapStackTrace(stackStr, sourceLocation, {
     strict: false, sourceSnippet: true

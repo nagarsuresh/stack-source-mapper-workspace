@@ -1,4 +1,4 @@
-import {mapStackTrace, parseStackTrace} from 'stack-source-mapper';
+import { mapStackTrace, parseStackTrace } from 'stack-source-mapper';
 
 
 console.log('App to test exception stack trace mapping');
@@ -22,11 +22,11 @@ const sourceLocation = `${__dirname}/../../../packages/stack-source-mapper-test-
 
 (async () => {
   console.log(`Original Stack ${stackStr}\n\n\n`);
-  const result = await mapStackTrace(stackStr, sourceLocation, {strict: false, sourceSnippet: true});
+  const result = await mapStackTrace(stackStr, sourceLocation, { strict: false, sourceSnippet: true });
   console.log(result);
 
   const parsed = await parseStackTrace(stackStr);
-  const r = await mapStackTrace(parsed, sourceLocation, {strict: true, sourceSnippet: false});
+  const r = await mapStackTrace(parsed, sourceLocation, { strict: true, sourceSnippet: false });
   console.log(r);
 
 

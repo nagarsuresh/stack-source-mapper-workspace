@@ -51,10 +51,21 @@ async function mapStackFrames(stackFrames: StackTraceFrame[], location: string, 
   const mappedFrames: StackTraceFrame[] = [];
   const sourceMapFiles: string[] = getSourceMapFiles(location);
 
+  // let i = 0;
   for (const exceptionFrame of stackFrames) {
+    // if (i > 12) {
+    //   break;
+    // }
     const sourceFile: string = getMatchingSourcMapFile(exceptionFrame, sourceMapFiles, options);
-    const mappedFrame = await getMappedStackFrame(exceptionFrame, location, sourceFile, options);
-    mappedFrames.push(mappedFrame);
+    if (sourceFile) {
+      try {
+        const mappedFrame = await getMappedStackFrame(exceptionFrame, location, sourceFile, options);
+        mappedFrames.push(mappedFrame);
+      } catch (err) {
+        console.error(`Error mapping stack frame ${serializeStackTraceFrame(exceptionFrame)}.`, err);
+      }
+    }
+    // i++;
   }
 
   return mappedFrames;
@@ -84,7 +95,7 @@ function getMatchingSourcMapFile(frame: StackTraceFrame, sourceMapFiles: string[
   }
 
   if (!matchingFileName) {
-    throw new Error(`No Matching source map file found for ${exceptionFileName}`);
+    console.warn(`No Matching source map file found for ${exceptionFileName}`);
   }
   return matchingFileName;
 }
@@ -99,33 +110,42 @@ function getMatchCount(stackFile: string, sourceMapFile: string): number {
 }
 
 
-async function getMappedStackFrame(
+function getMappedStackFrame(
   exceptionFrame: StackTraceFrame,
   location: string, sourceMapFile: string, options: MapStackOptions): Promise<StackTraceFrame> {
 
   return new Promise((resolve, reject) => {
-    const mappedFrame: StackTraceFrame = {};
-    const rawSourceMap = String(readFileSync(`${location}${sourceMapFile}`));
-    SourceMapConsumer.with(rawSourceMap, null, consumer => {
-      const sourceInfo: NullableMappedPosition = consumer.originalPositionFor({
-        line: <number>exceptionFrame.lineNumber,
-        column: exceptionFrame.columnNumber
-      });
-      mappedFrame.fileName = sourceInfo.source;
-      mappedFrame.funcName = sourceInfo.name;
-      mappedFrame.columnNumber = sourceInfo.column;
-      mappedFrame.lineNumber = sourceInfo.line;
+    try {
+      const mappedFrame: StackTraceFrame = {};
+      const rawSourceMap = String(readFileSync(`${location}${sourceMapFile}`));
+      SourceMapConsumer.with(rawSourceMap, null, consumer => {
+        const sourceInfo: NullableMappedPosition = consumer.originalPositionFor({
+          line: <number>exceptionFrame.lineNumber,
+          column: exceptionFrame.columnNumber
+        });
+        mappedFrame.fileName = sourceInfo.source;
+        mappedFrame.funcName = sourceInfo.name;
+        mappedFrame.columnNumber = sourceInfo.column;
+        mappedFrame.lineNumber = sourceInfo.line;
 
-      if (options.sourceSnippet) {
-        const sourceContents = consumer.sourceContentFor(<string>sourceInfo.source);
-        const sourceSnippet = getSourceLines(sourceContents, sourceInfo, options.sourceLines || 3);
-        if (sourceSnippet) {
-          mappedFrame.sourceSnippet = sourceSnippet;
+        try {
+          if (options.sourceSnippet) {
+            const sourceContents = consumer.sourceContentFor(<string>sourceInfo.source);
+            const sourceSnippet = getSourceLines(sourceContents, sourceInfo, options.sourceLines || 3);
+            if (sourceSnippet) {
+              mappedFrame.sourceSnippet = sourceSnippet;
+            }
+          }
+        } catch (err) {
+          resolve(mappedFrame);
         }
-      }
 
-      resolve(mappedFrame);
-    });
+        resolve(mappedFrame);
+      });
+
+    } catch (err) {
+      reject('Not parseable');
+    }
   });
 
 }

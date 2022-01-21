@@ -2,7 +2,12 @@
   "name": "stack-source-mapper-workspace",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build:lib": "nx build stack-source-mapper",
+    "build:app": "nx build stack-source-mapper-test-app",
+    "build:run": "npm run build:lib && npm run build:app && npm run run:app",
+    "run:app": "cd dist/packages/stack-source-mapper-test-app && node main.js"
+  },
   "private": true,
   "dependencies": {
     "tslib": "^2.0.0"

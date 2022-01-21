@@ -5,29 +5,39 @@ console.log('App to test exception stack trace mapping');
 
 
 const stackStr = `
-TypeError: {}.helloWorld is not a function
-    at a.throwError (main.15600dbb30d4c3c4c884.js:1:196320)
-    at main.15600dbb30d4c3c4c884.js:1:213496
-    at nD (main.15600dbb30d4c3c4c884.js:1:59586)
-    at d (main.15600dbb30d4c3c4c884.js:1:59748)
-    at HTMLButtonElement.<anonymous> (main.15600dbb30d4c3c4c884.js:1:117054)
-    at T.invokeTask (polyfills.bfdd93de4f99fb5503f5.js:1:7138)
-    at Object.onInvokeTask (main.15600dbb30d4c3c4c884.js:1:88522)
-    at T.invokeTask (polyfills.bfdd93de4f99fb5503f5.js:1:7059)
-    at I.runTask (polyfills.bfdd93de4f99fb5503f5.js:1:2533)
-    at m.invokeTask [as invoke] (polyfills.bfdd93de4f99fb5503f5.js:1:8189)
+TypeError: Failed to set the 'currentNode' property on 'TreeWalker': Failed to convert value to 'Node'.
+    at new fe (https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:536926)
+    at Object.templateFactory (https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:548230)
+    at Re.__commitTemplateResult (https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:544266)
+    at Re.commit (https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:543709)
+    at https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:557802
+    at Function.Oe.render (https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:557812)
+    at f.update (https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:557094)
+    at f.performUpdate (https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:553163)
+    at f.<anonymous> (https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:552811)
+    at Generator.next (<anonymous>)
+    at G (https://10.83.12.28/napp/intelligence-ui/polyfills.fe89e5976386e4a5d9d9.js:1:15910)
+    at https://10.83.12.28/napp/intelligence-ui/polyfills.fe89e5976386e4a5d9d9.js:1:14994
+    at R (https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:75)
+    at T.invoke (https://10.83.12.28/napp/intelligence-ui/polyfills.fe89e5976386e4a5d9d9.js:1:6527)
+    at Object.onInvoke (https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:289880)
+    at T.invoke (https://10.83.12.28/napp/intelligence-ui/polyfills.fe89e5976386e4a5d9d9.js:1:6467)
+    at I.run (https://10.83.12.28/napp/intelligence-ui/polyfills.fe89e5976386e4a5d9d9.js:1:1923)
+    at https://10.83.12.28/napp/intelligence-ui/polyfills.fe89e5976386e4a5d9d9.js:1:16720
+    at T.invokeTask (https://10.83.12.28/napp/intelligence-ui/polyfills.fe89e5976386e4a5d9d9.js:1:7145)
+    at Object.onInvokeTask (https://10.83.12.28/napp/intelligence-ui/main.b033d45fc5c9075af7a0.js:1:289696)
 `;
 
-const sourceLocation = `${__dirname}/../../../packages/stack-source-mapper-test-app/src/example/app-source-maps/`;
+const sourceLocation = `${__dirname}/../../../packages/stack-source-mapper-test-app/src/example/pace/`;
 
 (async () => {
-  console.log(`Original Stack ${stackStr}\n\n\n`);
-  const result = await mapStackTrace(stackStr, sourceLocation, { strict: false, sourceSnippet: true });
+  // console.log(`Original Stack ${stackStr}\n\n\n`);
+  const result = await mapStackTrace(stackStr, sourceLocation, { strict: true, sourceSnippet: true });
   console.log(result);
 
-  const parsed = await parseStackTrace(stackStr);
-  const r = await mapStackTrace(parsed, sourceLocation, { strict: true, sourceSnippet: false });
-  console.log(r);
+  // const parsed = await parseStackTrace(stackStr);
+  // const r = await mapStackTrace(parsed, sourceLocation, { strict: true, sourceSnippet: false });
+  // console.log(r);
 
 
 })();
